@@ -1,9 +1,12 @@
 package com.CS213.androidchess101;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
+
+import com.CS213.view.SquareAdapter;
 
 public class ChessActivity extends ActionBarActivity {
 
@@ -11,6 +14,11 @@ public class ChessActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chess_activity);
+		
+		final GridView chessBoardGridView = (GridView)findViewById(R.id.chessboard);
+		
+		chessBoardGridView.setAdapter(new SquareAdapter(this));
+		
 	}
 
 	@Override

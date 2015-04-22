@@ -31,4 +31,14 @@ public class GameListActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	/*private static void initDisplayButton() {
+		
+		public display() {
+			
+			//Here's all I need to do. Get focused for like 2 hours andfigure how to display my board. Then i'll e like seen you before
+			
+		}
+	}*/
+	
 }
