@@ -6,9 +6,13 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_chess">ChessActivity</string>
     <string name="title_activity_game_list">GameListActivity</string>
-    
-    <string name="play_btn">Play</string>   
+    <string name="squaredesc">Square Background</string>
+    <string name="piecedesc">Chess Piece</string>
+    <string name="play_btn">Play</string>
     <string name="replay_btn">Replay</string>
-    
+    <string name="ai_btn">AI</string>
+    <string name="draw_btn">Draw</string>
+    <string name="resign_btn">Resign</string>
+    <string name="undo_btn">Undo</string>
 
 </resources>

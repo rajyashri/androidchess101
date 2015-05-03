@@ -84,6 +84,10 @@ public class Game {
 	}
 
 	public Square[][] getBoard() { return board; }
+	
+	public ChessPiece[] getCapturedWhite() { return capturedWhite; }
+	
+	public ChessPiece[] getCapturedBlack() { return capturedBlack; }
 
 	public Player getCurrentPlayer() { return turn; } 
 
@@ -197,7 +201,7 @@ public class Game {
 		}
 	}
 
-	private int fileToIndex(char file) {
+	public int fileToIndex(char file) {
 
 		switch (file) {
 
@@ -249,6 +253,12 @@ public class Game {
 	public boolean blackInCheck() { return blackInCheck; }
 
 	public boolean whiteInCheck() { return whiteInCheck; }
+	
+	public void nextTurn() {
+		turn = turn == white ? black : white;
+	}
+	
+	
 
 
 

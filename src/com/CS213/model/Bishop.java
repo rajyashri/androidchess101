@@ -6,6 +6,8 @@ public class Bishop extends ChessPiece {
 
 	public String getInitial() { return "B"; }
 	
+	public String getPieceName() { return "bishop"; }
+	
 	/*
 	 * Specific for rules of Bishop chess piece:
 	 * The bishop may move any number of squares in a diagonal direction 	
@@ -20,5 +22,5 @@ public class Bishop extends ChessPiece {
 		}
 		return this.clearPathTo(dest);	//it can move if the diagonals are clear
 	}
-
+	
 }

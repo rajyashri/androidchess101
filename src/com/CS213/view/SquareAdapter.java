@@ -1,28 +1,31 @@
 package com.CS213.view;
 
-import android.R;
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.CS213.androidchess101.R;
+import com.CS213.model.ChessPiece;
+import com.CS213.model.Square;
 
 public class SquareAdapter extends BaseAdapter {
 
 	private Context context;
-	
-	
-	public SquareAdapter(Context c) {
-		
+	private Square[][] board;
+
+	public SquareAdapter(Context c, Square[][] board) {
 		this.context = c;
+		this.board = board;
 	}
-	
-	
+
+
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 64;
 	}
 
 	@Override
@@ -37,34 +40,47 @@ public class SquareAdapter extends BaseAdapter {
 		return 0;
 	}
 
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-	
-		/*View squareContainerView = convertView;
-        
-		  if ( convertView == null ) {
-		    //Inflate the layout
-		    final LayoutInflater layoutInflater = 
-		      (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		    squareContainerView = 
-		      layoutInflater.inflate(R.id.square, null);
 
-		    // Background
-		    final ImageView squareView = 
-		        (ImageView)squareContainerView.findViewById(R.id.square_background);
-		    squareView.setImageResource(this.aSquareImg[(position + position/8)%2]);
+		ImageView v;
+		if (convertView == null) {  
+			
+			v = new ImageView(context);
+			int size = parent.getWidth()/8;
+			
+			v.setLayoutParams(new GridView.LayoutParams(size,size));
 
-		    if (pPosition % 2 == 0) { //mock test
-		        // Add The piece
-		        final ImageView pieceView = 
-		          (ImageView)squareContainerView.findViewById(R.id.piece);
-		        pieceView.setImageResource(R.drawable.green);
-		        pieceView.setTag(position);
-		    }
-		  }
-		  return squareContainerView;*/
-		
-		return null;
+			//background black or white depending of the position
+			int col = position/8 %2;
+			if (col == 0)
+			{
+				if (position%2 == 0)
+					v.setBackgroundColor(Color.parseColor("#DFAE74"));
+				else
+					v.setBackgroundColor(Color.parseColor("#6B4226"));
+			}
+			else
+			{
+				if (position%2 == 0)
+					v.setBackgroundColor(Color.parseColor("#6B4226"));
+				else
+					v.setBackgroundColor(Color.parseColor("#DFAE74"));
+			}
+
+			//load images
+			ChessPiece p = board[position/8][position%8].getPiece();
+
+			if( p != null)
+				v.setImageResource(context.getResources().getIdentifier(p.toString(), "drawable", context.getPackageName()));
+		} else {
+			v = (ImageView) convertView;
+		}
+
+
+		return v;
 	}
-
 }
+
+

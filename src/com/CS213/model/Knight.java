@@ -3,6 +3,8 @@ package com.CS213.model;
 public class Knight extends ChessPiece {
 
 	public String getInitial() { return "N"; }
+	
+	public String getPieceName() { return "knight"; }
 
 	/*
 	 * Specific for rules of Knight chess piece:

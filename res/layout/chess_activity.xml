@@ -8,6 +8,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.CS213.androidchess101.ChessActivity" >
 
-    <include layout="@layout/chessboard"/>
+    <GridView
+        android:id="@+id/chessboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:columnWidth="60dp"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="0dp"
+        android:numColumns="8"
+        android:padding="0dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
+
+    <Button
+        android:id="@+id/undoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/chessboard"
+        android:layout_centerHorizontal="true"
+        android:text="@string/undo_btn" />
+    <Button
+        android:id="@+id/drawButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/chessboard"
+        android:layout_centerHorizontal="true"
+        android:text="@string/draw_btn" />
+
+    <Button
+        android:id="@+id/AIButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chessboard"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/ai_btn" />
+
+    <Button
+        android:id="@+id/resignButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chessboard"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/AIButton"
+        android:layout_toRightOf="@+id/AIButton"
+        android:text="@string/resign_btn" />
 
 </RelativeLayout>

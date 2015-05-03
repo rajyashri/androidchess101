@@ -3,6 +3,8 @@ package com.CS213.model;
 public class Queen extends ChessPiece {
 
 	public String getInitial() { return "Q"; }
+	
+	public String getPieceName() { return "queen"; }
 
 	public boolean isValidMove(Square dest) {
 

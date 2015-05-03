@@ -6,18 +6,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
+import com.CS213.controller.Game;
 import com.CS213.view.SquareAdapter;
 
 public class ChessActivity extends ActionBarActivity {
 
+	private Game game;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chess_activity);
 		
+		this.game = new Game();
+		
 		final GridView chessBoardGridView = (GridView)findViewById(R.id.chessboard);
 		
-		chessBoardGridView.setAdapter(new SquareAdapter(this));
+		chessBoardGridView.setAdapter(new SquareAdapter(this, game.getBoard()));
+		
 		
 	}
 

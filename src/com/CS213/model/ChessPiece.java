@@ -12,7 +12,8 @@ public abstract class ChessPiece {
 	private int moves;
 
 	public abstract String getInitial();
-
+	
+	public abstract String getPieceName();
 
 	public abstract boolean isValidMove(Square dest);
 
@@ -112,6 +113,15 @@ public abstract class ChessPiece {
 	public void setNumberOfMoves(int moves) { this.moves = moves; }
 
 	public void setBoard(Square[][] board) { this.board = board; }
+	
+	public String colorString() {
+		
+		return getPlayer().getColor() == PlayerColor.WHITE ? "white" : "black";
+	}
+	
+	public String toString() {
+		return colorString()+getPieceName();
+	}
 
 }
 
