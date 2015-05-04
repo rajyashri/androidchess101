@@ -21,40 +21,46 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="0dp" />
 
-    <Button
-        android:id="@+id/undoButton"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/chessboard"
         android:layout_centerHorizontal="true"
-        android:text="@string/undo_btn" />
-    <Button
-        android:id="@+id/drawButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/chessboard"
-        android:layout_centerHorizontal="true"
-        android:text="@string/draw_btn" />
+        android:layout_marginBottom="20dp" >
 
-    <Button
-        android:id="@+id/AIButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/chessboard"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/ai_btn" />
+        <Button
+            android:id="@+id/AIButton"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/ai_btn" />
 
-    <Button
-        android:id="@+id/resignButton"
+        <Button
+            android:id="@+id/undoButton"
+            android:layout_width="68dp"
+            android:layout_height="wrap_content"
+            android:text="@string/undo_btn" />
+
+        <Button
+            android:id="@+id/drawButton"
+            android:layout_width="68dp"
+            android:layout_height="wrap_content"
+            android:text="@string/draw_btn" />
+
+        <Button
+            android:id="@+id/resignButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/resign_btn" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/turnView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/chessboard"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/AIButton"
-        android:layout_toRightOf="@+id/AIButton"
-        android:text="@string/resign_btn" />
+        android:layout_alignBottom="@+id/chessboard"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:text="@string/white_turn" />
 
 </RelativeLayout>

@@ -14,5 +14,7 @@
     <string name="draw_btn">Draw</string>
     <string name="resign_btn">Resign</string>
     <string name="undo_btn">Undo</string>
+    <string name="white_turn">White\'s Turn</string>
+    <string name="black_turn">Black\'s Turn</string>
 
 </resources>
