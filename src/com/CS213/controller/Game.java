@@ -23,6 +23,8 @@ public class Game {
 	private Player turn;
 	private boolean blackInCheck;
 	private boolean whiteInCheck;
+	private boolean blackWins;
+	private boolean whiteWins;
 
 	public Game() {
 
@@ -160,14 +162,12 @@ public class Game {
 			if (turn.getColor() == PlayerColor.WHITE) {
 				blackInCheck = true;
 				if (black.getKing().checkmate(black.getKing().getLocation())) {
-					System.out.println("White wins.");
-					System.exit(0);
+					whiteWins = true;
 				}
 			} else {
 				whiteInCheck = true;
 				if (white.getKing().checkmate(white.getKing().getLocation())) {
-					System.out.println("Black wins.");
-					System.exit(0);
+					blackWins = true;
 				}
 			}
 		}
@@ -258,8 +258,9 @@ public class Game {
 		turn = turn == white ? black : white;
 	}
 	
+	public boolean whiteWin() { return whiteWins; }
 	
-
-
+	public boolean blackWin() { return blackWins; }
+	
 
 }

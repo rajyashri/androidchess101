@@ -2,9 +2,11 @@ package com.CS213.androidchess101;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.CS213.controller.Game;
-import com.CS213.model.PlayerColor;
 import com.CS213.model.Square;
 import com.CS213.view.SquareAdapter;
 
@@ -112,19 +113,49 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 		getMenuInflater().inflate(R.menu.chess, menu);
 		return true;
 	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch(item.getItemId()) {
+		case (R.id.action_settings):
+			return true;
+		case (android.R.id.home):
+			onBackPressed();
 			return true;
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
+	
 
+	@Override
+	public void onBackPressed() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Exit");
+		builder.setMessage("Quit game?");
+
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				startActivity(new Intent(ChessActivity.this, HomeActivity.class));
+				RUN_ONCE = false;
+				finish();
+			}
+		});
+
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -135,7 +166,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			Square selectedSquare = game.getBoard()[position/8][position%8];
 
 			if (selectedSquare.getPiece() == null) return;
-			
+
 			if (selectedSquare.getPiece().getPlayer().getColor() != game.getCurrentPlayer().getColor()) return;
 
 			squaresSelected[0] = view;
@@ -151,11 +182,56 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			squarePositions[1] = position;
 
 			if (game.move(squarePositions[0], squarePositions[1])) {
-				
+
 				adapter.notifyDataSetChanged();
 				chessboard.setAdapter(adapter);
 				changeTurnText();
-				
+
+				String toastMessage = "";
+				Toast toast = null;
+				if (game.whiteWin() || game.blackWin()) {
+
+					final String winner = game.whiteWin() == true ? "White" : "Black";
+
+					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							switch (which){
+							case DialogInterface.BUTTON_POSITIVE:
+								Intent intent = getIntent();
+								finish();
+								RUN_ONCE = false;
+								startActivity(intent);
+								break;
+
+							case DialogInterface.BUTTON_NEGATIVE:
+								startActivity(new Intent(ChessActivity.this, HomeActivity.class));
+								RUN_ONCE = false;
+								finish();
+								break;
+							}
+						}
+					};
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setMessage(winner + " wins! Want to play again?").setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener).show();
+
+				}
+				else if (game.blackInCheck()) {
+
+					toastMessage = "Black King in check.";
+					toast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
+					toast.show();
+				}
+				else if (game.whiteInCheck()) {
+
+					toastMessage = "White King in check.";
+					toast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
+					toast.show();
+				}
+
+
 			} else {
 				Toast toast = Toast.makeText(this, "Illegal Move", Toast.LENGTH_SHORT);
 				toast.show();
@@ -173,11 +249,11 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 	private void changeTurnText() {
 
 		if (turnView.getText().toString().compareTo(getResources().getString(R.string.white_turn)) == 0) {
-			
+
 			turnView.setText(getResources().getString(R.string.black_turn));
 		}
 		else {
-			
+
 			turnView.setText(getResources().getString(R.string.white_turn));
 		}
 	}

@@ -16,5 +16,6 @@
     <string name="undo_btn">Undo</string>
     <string name="white_turn">White\'s Turn</string>
     <string name="black_turn">Black\'s Turn</string>
+    <string name="welcome_text">ANDROID CHESS</string>
 
 </resources>

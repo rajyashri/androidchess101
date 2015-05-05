@@ -8,22 +8,45 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.CS213.androidchess101.HomeActivity" >
 
-    <Button
-        android:id="@+id/replayButton"
+    <TextView
+        android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="30dp"
-        android:text="@string/replay_btn" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/welcome_text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/playButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="43dp"
-        android:layout_toLeftOf="@+id/replayButton"
-        android:text="@string/play_btn" />
+        android:layout_below="@+id/chessLogo"
+        android:layout_marginTop="40dp"
+         android:layout_marginLeft="35dp" >
+
+        <Button
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="43dp"
+            android:text="@string/play_btn" />
+
+        <Button
+            android:id="@+id/replayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:text="@string/replay_btn" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/chessLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:contentDescription="chess logo"
+        android:src="@drawable/chesslogo" />
 
 </RelativeLayout>
