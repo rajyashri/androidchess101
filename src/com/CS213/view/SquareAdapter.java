@@ -52,7 +52,7 @@ public class SquareAdapter extends BaseAdapter {
 			
 			v.setLayoutParams(new GridView.LayoutParams(size,size));
 
-			//background black or white depending of the position
+			//background brown or light brown depending of the position
 			int col = position/8 %2;
 			if (col == 0)
 			{
@@ -60,6 +60,7 @@ public class SquareAdapter extends BaseAdapter {
 					v.setBackgroundColor(Color.parseColor("#DFAE74"));
 				else
 					v.setBackgroundColor(Color.parseColor("#6B4226"));
+			
 			}
 			else
 			{

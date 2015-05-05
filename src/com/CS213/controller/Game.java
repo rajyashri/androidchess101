@@ -91,18 +91,18 @@ public class Game {
 
 	public Player getCurrentPlayer() { return turn; } 
 
-	public boolean move(String s, String d, String p) {
+	public boolean move(int s, int d) {
 
 		blackInCheck = false;
 		whiteInCheck = false;
-		int c = fileToIndex(s.charAt(0));
-		int r = 8 - Character.getNumericValue(s.charAt(1));
+		int c = s%8;
+		int r = s/8;
 
 
 		Square source = board[r][c];
 
-		c = fileToIndex(d.charAt(0));
-		r = 8 - Character.getNumericValue(d.charAt(1));
+		c = d%8;
+		r = d/8;
 
 
 		Square dest = board[r][c];
@@ -144,7 +144,7 @@ public class Game {
 		//promotion
 		if (((turn == white && dest.getY() == 0) || (turn == black && dest.getY() == 7)) && sourcePiece instanceof Pawn) {
 
-			ChessPiece promotedPiece = promotion(p);
+			ChessPiece promotedPiece = promotion("Q");
 			promotedPiece.setLocation(dest);
 			promotedPiece.setNumberOfMoves(sourcePiece.numberOfMoves());
 			promotedPiece.setPlayer(turn);

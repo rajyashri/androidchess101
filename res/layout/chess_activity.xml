@@ -59,8 +59,8 @@
         android:id="@+id/turnView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/chessboard"
-        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="@string/white_turn" />
 
 </RelativeLayout>
