@@ -1,23 +1,28 @@
 package com.CS213.androidchess101;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.CS213.controller.Game;
+import com.CS213.model.ChessPiece;
 import com.CS213.model.Square;
 import com.CS213.view.SquareAdapter;
 
@@ -32,6 +37,8 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 	private View[] squaresSelected;
 	private int[] squarePositions;
 	private SquareAdapter adapter;
+	private boolean drawPressed;
+	private boolean drawPressedThisTurn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,11 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 		}
 
+
+		initAIButton();
+		initResignButton();
+		initDrawButton();
+		initUndoButton();
 
 		final GridView chessBoardGridView = (GridView)findViewById(R.id.chessboard);
 
@@ -113,6 +125,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 		getMenuInflater().inflate(R.menu.chess, menu);
 		return true;
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -123,16 +136,15 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			return true;
 		case (android.R.id.home):
 			onBackPressed();
-			return true;
+		return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
-	
 
 	@Override
 	public void onBackPressed() {
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Exit");
 		builder.setMessage("Quit game?");
@@ -155,7 +167,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-	
+
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -242,9 +254,57 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			squaresSelected[1] = null;
 
 		}
+		
+		checkDraw();
 
 	}
 
+	private void checkDraw() {
+
+		if (drawPressed && !drawPressedThisTurn) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Draw");
+			builder.setMessage("Accept draw?");
+
+			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					
+					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							switch (which){
+							case DialogInterface.BUTTON_POSITIVE:
+								Intent intent = getIntent();
+								finish();
+								RUN_ONCE = false;
+								startActivity(intent);
+								break;
+
+							case DialogInterface.BUTTON_NEGATIVE:
+								dialog.dismiss();
+								startActivity(new Intent(ChessActivity.this, HomeActivity.class));
+								RUN_ONCE = false;
+								finish();
+							}
+						}
+					};
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(ChessActivity.this);
+					builder.setMessage("Draw. Want to play again?").setPositiveButton("Yes", dialogClickListener)
+					.setNegativeButton("No", dialogClickListener).show();
+				}
+			});
+
+			builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					drawPressed = false;
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	}
 
 	private void changeTurnText() {
 
@@ -256,6 +316,8 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			turnView.setText(getResources().getString(R.string.white_turn));
 		}
+		
+		drawPressedThisTurn = false;
 	}
 
 	private int updateColor(int position) {
@@ -276,6 +338,102 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 				return Color.parseColor("#6B4226");
 			else
 				return Color.parseColor("#DFAE74");
+		}
+	}
+
+	private void initAIButton() {
+
+		Button AIButton = (Button) findViewById(R.id.AIButton);
+		AIButton.setOnClickListener(new OnClickListener() {
+
+			@Override 
+			public void onClick(View argo) {
+
+				//AI();
+			}
+		});
+	}
+
+	private void initDrawButton() {
+
+		Button AIButton = (Button) findViewById(R.id.drawButton);
+		AIButton.setOnClickListener(new OnClickListener() {
+
+			@Override 
+			public void onClick(View argo) {
+				draw();
+			}
+		});
+	}
+
+	private void initResignButton() {
+
+		Button resignButton = (Button) findViewById(R.id.resignButton);
+		resignButton.setOnClickListener(new OnClickListener() {
+
+			@Override 
+			public void onClick(View argo) {
+
+				resign();
+			}
+		});
+	}
+
+	private void initUndoButton() {
+
+		Button undoButton = (Button) findViewById(R.id.undoButton);
+		undoButton.setOnClickListener(new OnClickListener() {
+
+			@Override 
+			public void onClick(View argo) {
+				undo();		
+			}
+		});
+	}
+
+	private void AI() {
+
+		ArrayList<ChessPiece> pieces = game.getCurrentPlayer().getUncapturedPieces();
+		Random r = new Random();
+		for (int i = 0; i < pieces.size(); i++) {
+
+			ChessPiece piece = pieces.get(r.nextInt(pieces.size() - 1));
+
+		}
+	}
+
+	private void resign() {
+
+	}
+
+	private void undo() {
+
+	}
+
+	private void draw() {
+
+		if (!drawPressed) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Draw");
+			builder.setMessage("Request draw?");
+
+			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					drawPressed = true;
+					drawPressedThisTurn = true;
+				}
+			});
+
+			builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					drawPressed = false;
+					drawPressedThisTurn = false;
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
 		}
 	}
 }

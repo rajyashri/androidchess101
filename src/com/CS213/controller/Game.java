@@ -69,6 +69,7 @@ public class Game {
 			board[row][i].setPiece(pieces[i]);
 			board[row][i].getPiece().setPlayer(player);
 			player.addPiece(pieces[i]);
+			player.addUncapturedPiece(pieces[i]);
 
 		}
 
@@ -81,6 +82,7 @@ public class Game {
 			board[row][i].setPiece(pawn);
 			board[row][i].getPiece().setPlayer(player);
 			player.addPiece(pawn);
+			player.addUncapturedPiece(pawn);
 		}
 
 	}
@@ -128,10 +130,12 @@ public class Game {
 			if (turn == white) {
 
 				capturedBlack[capturedBlackCount++] = destPiece;
+				destPiece.getPlayer().removePiece(destPiece);
 			} 
 			else {
 
 				capturedWhite[capturedWhiteCount++] = destPiece;
+				destPiece.getPlayer().removePiece(destPiece);
 			}
 		}
 
@@ -180,7 +184,7 @@ public class Game {
 
 	private void enPassant(ChessPiece sourcePiece, Square dest) {
 
-		if (sourcePiece instanceof Pawn) {
+		if (sourcePiece instanceof Pawn && dest.getPiece() == null) {
 
 			int yPos = sourcePiece.getPlayer().getColor() == PlayerColor.WHITE ? 1 : -1;
 
@@ -191,9 +195,11 @@ public class Game {
 
 				if (turn == white) {
 					capturedBlack[capturedBlackCount++] = capturedPawn;
+					capturedPawn.getPlayer().removePiece(capturedPawn);
 				}
 				else {
 					capturedWhite[capturedWhiteCount++] = capturedPawn;
+					capturedPawn.getPlayer().removePiece(capturedPawn);
 				}
 
 				board[sourcePiece.getLocation().getY()][dest.getX()].setPiece(null);
