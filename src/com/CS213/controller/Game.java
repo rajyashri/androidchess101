@@ -1,9 +1,15 @@
 package com.CS213.controller;
 
+import java.util.LinkedList;
+
+import android.util.Log;
+
 import com.CS213.model.Bishop;
 import com.CS213.model.ChessPiece;
 import com.CS213.model.King;
 import com.CS213.model.Knight;
+import com.CS213.model.Move;
+import com.CS213.model.Move.MoveType;
 import com.CS213.model.Pawn;
 import com.CS213.model.Player;
 import com.CS213.model.PlayerColor;
@@ -25,6 +31,7 @@ public class Game {
 	private boolean whiteInCheck;
 	private boolean blackWins;
 	private boolean whiteWins;
+	private LinkedList<Move> moves;
 
 	public Game() {
 
@@ -40,6 +47,7 @@ public class Game {
 		capturedWhiteCount = 0;
 		capturedBlackCount = 0;
 		turn = white;
+		moves = new LinkedList<Move>();
 
 		for (int i = 0; i < 8 ; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -88,9 +96,9 @@ public class Game {
 	}
 
 	public Square[][] getBoard() { return board; }
-	
+
 	public ChessPiece[] getCapturedWhite() { return capturedWhite; }
-	
+
 	public ChessPiece[] getCapturedBlack() { return capturedBlack; }
 
 	public Player getCurrentPlayer() { return turn; } 
@@ -115,6 +123,10 @@ public class Game {
 
 		ChessPiece destPiece = dest.getPiece();
 
+		ChessPiece capture = null;
+
+		MoveType moveType = MoveType.NORMAL;
+
 		if (sourcePiece == null) return false;
 
 		//attempting to move opponent's piece
@@ -130,22 +142,72 @@ public class Game {
 			if (turn == white) {
 
 				capturedBlack[capturedBlackCount++] = destPiece;
-				destPiece.getPlayer().removePiece(destPiece);
 			} 
 			else {
 
 				capturedWhite[capturedWhiteCount++] = destPiece;
-				destPiece.getPlayer().removePiece(destPiece);
 			}
+
+			destPiece.getPlayer().removePiece(destPiece);
+			capture = destPiece;
+
 		}
 
-		enPassant(sourcePiece, dest);
+		Move move = new Move(sourcePiece, capture, source, dest);
+
+		if (enPassant(sourcePiece, dest)) moveType = MoveType.ENPASSANT;
+
+		if (castle(sourcePiece, dest)) {
+
+			moveType = MoveType.CASTLE;
+			if (sourcePiece.getPlayer().getColor() == PlayerColor.WHITE) {
+
+				if (dest.getX() == 6) {
 
 
+					ChessPiece rook = board[7][7].getPiece();
+					rook.setLocation(board[7][5]);
+					rook.incrementMoves();
+					board[7][5].setPiece(rook);
+					board[7][7].setPiece(null);
+				}
+				else if (dest.getX() == 2) {
+
+					ChessPiece rook = getBoard()[7][0].getPiece();
+					rook.setLocation(getBoard()[7][3]);
+					rook.incrementMoves();
+					board[7][3].setPiece(rook);
+					board[7][0].setPiece(null);
+
+				}
+			}
+			else {
+
+				if (dest.getX() == 6) {
+
+					ChessPiece rook = board[0][7].getPiece();
+					rook.setLocation(board[0][5]);
+					rook.incrementMoves();
+					board[0][5].setPiece(rook);
+					board[0][7].setPiece(null);
+
+				}
+				else if (dest.getX() == 2) {
+
+					ChessPiece rook = board[0][0].getPiece();
+					rook.setLocation(board[0][3]);
+					rook.incrementMoves();
+					board[0][3].setPiece(rook);
+					board[0][0].setPiece(null);
+				}
+			}
+		}
+		
 		source.setPiece(null);
 		sourcePiece.setLocation(dest);
 		dest.setPiece(sourcePiece);
 		sourcePiece.incrementMoves();
+
 
 		//promotion
 		if (((turn == white && dest.getY() == 0) || (turn == black && dest.getY() == 7)) && sourcePiece instanceof Pawn) {
@@ -160,7 +222,7 @@ public class Game {
 		}
 
 		Square oppKing = turn.getOpponent().getKing().getLocation();
-		
+
 		if (turn.getOpponent().getKing().inCheck(oppKing)) {
 
 			if (turn.getColor() == PlayerColor.WHITE) {
@@ -176,13 +238,14 @@ public class Game {
 			}
 		}
 
-
+		move.setType(moveType);
+		moves.add(move);
 		turn = (turn == white) ? black : white;
 
 		return true;
 	}
 
-	private void enPassant(ChessPiece sourcePiece, Square dest) {
+	private boolean enPassant(ChessPiece sourcePiece, Square dest) {
 
 		if (sourcePiece instanceof Pawn && dest.getPiece() == null) {
 
@@ -203,8 +266,22 @@ public class Game {
 				}
 
 				board[sourcePiece.getLocation().getY()][dest.getX()].setPiece(null);
+
+				return true;
 			}
 		}
+
+		return false;
+	}
+
+
+	private boolean castle(ChessPiece sourcePiece, Square dest) {
+
+		int xPos = Math.abs( dest.getX() - sourcePiece.getLocation().getX());
+
+		if (sourcePiece instanceof King && xPos != -9) return true;
+
+		return false;
 	}
 
 	public int fileToIndex(char file) {
@@ -259,14 +336,14 @@ public class Game {
 	public boolean blackInCheck() { return blackInCheck; }
 
 	public boolean whiteInCheck() { return whiteInCheck; }
-	
+
 	public void nextTurn() {
 		turn = turn == white ? black : white;
 	}
-	
+
 	public boolean whiteWin() { return whiteWins; }
-	
+
 	public boolean blackWin() { return blackWins; }
-	
+
 
 }

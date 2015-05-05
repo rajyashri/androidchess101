@@ -4,70 +4,68 @@ public class King extends ChessPiece {
 
 
 	public String getInitial() { return "K"; }
-	
+
 	public String getPieceName() { return "king"; }
 
 
-
-	/*
-	 * Specific for rules of King chess piece:
-	 * King can move the king can only move one square in any direction
-	 * King may not move into a position where it may be captured by an opposing piece
-	 */
 	public boolean isValidMove(Square dest)
 	{
 		int xPos = Math.abs( dest.getX() - getLocation().getX());
 		int yPos= Math.abs( dest.getY() - getLocation().getY());
 
+		//moving one space in any direction.
 		if (((xPos) <=1 && (yPos) <=1)) return true;
 
-		/*
-		 * Where checks for castling takes place
-		 * 
-		 * Rules for Castling: Source -> http://www.learnchessrules.com/castling.htm
-		 * 
-		 * It can only occur if there are no pieces standing between the king and the rook.
-		 * Neither king nor the rook to be castled with may have moved from its original position. 
-		 * (The other rook may have already moved.)
-		 * There can be no opposing piece that could possibly capture the king in his original square, 
-		 * the square he moves through or the square that he ends the turn.
-		 * The king moves two squares toward the rook he intends to castle with (this may be either rook). 
-		 * The rook then moves to the square through which the king passed.
-		 * If the king castles queen-side the rook must move three squares. 
-		 * However on the king-side the rook only moves two squares.
-		 */
+		if (getPlayer().getColor() == PlayerColor.WHITE) {
 
-		if (xPos != 2 || numberOfMoves() != 0 || dest.getY() != getLocation().getY())
-		{
+			if (getLocation().getX() == 4 && getLocation().getY() == 7 && numberOfMoves() == 0) {
 
+				if ((dest.getX() == 6 && dest.getY() == 7)) {
+
+					ChessPiece rook = getBoard()[dest.getX() + 1][dest.getY()].getPiece();
+
+					if (!(rook instanceof Rook && rook.numberOfMoves() == 0)) return false;
+
+					return clearPathTo(dest);
+				} 
+				else if ((dest.getX() == 2 && dest.getY() == 7)) {
+
+					ChessPiece rook = getBoard()[dest.getX() - 2][dest.getY()].getPiece();
+
+					if (!(rook instanceof Rook && rook.numberOfMoves() == 0)) return false;
+
+					return clearPathTo(dest);
+
+				}
+				
+			}
 			return false;
 		}
+		else {
 
-		//Check for the location of a rook
-		int xPosRook;
-		if(dest.getX() == 6)
-			xPosRook =7;
-		else
-			xPosRook = 0;
+			if (getLocation().getX() == 4 && getLocation().getY() == 0 && numberOfMoves() == 0) {
 
-		ChessPiece castlingRook = getBoard()[xPosRook][getLocation().getY()].getPiece();
+				if ((dest.getX() == 6 && dest.getY() == 0)) {
 
-		if (!(castlingRook instanceof Rook)|| castlingRook.numberOfMoves() != 0 ||castlingRook == null)
-		{
+					ChessPiece rook = getBoard()[dest.getX() + 1][dest.getY()].getPiece();
 
+					if (!(rook instanceof Rook && rook.numberOfMoves() == 0)) return false;
+
+					return clearPathTo(dest);
+				} 
+				else if ((dest.getX() == 2 && dest.getY() == 0)) {
+					
+					ChessPiece rook = getBoard()[dest.getX() - 2][dest.getY()].getPiece();
+					
+					if (!(rook instanceof Rook && rook.numberOfMoves() == 0)) return false;
+
+					return clearPathTo(dest);
+				}
+				
+				
+			}
 			return false;
-		} 
-
-		if (xPosRook == 7)
-		{
-
-			return getBoard()[5][getLocation().getY()].getPiece() == null &&  getBoard()[6][getLocation().getY()].getPiece() == null; 
-		} 
-		else 
-		{
-			return getBoard()[1][getLocation().getY()].getPiece() == null &&  getBoard()[2][getLocation().getY()].getPiece() == null &&  getBoard()[3][getLocation().getY()].getPiece() == null;
 		}
-
 
 	}
 

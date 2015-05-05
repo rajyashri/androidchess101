@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.CS213.controller.Game;
 import com.CS213.model.ChessPiece;
+import com.CS213.model.Move;
+import com.CS213.model.PlayerColor;
 import com.CS213.model.Square;
 import com.CS213.view.SquareAdapter;
 
@@ -39,6 +41,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 	private SquareAdapter adapter;
 	private boolean drawPressed;
 	private boolean drawPressedThisTurn;
+	private Move lastMove;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -403,7 +406,50 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 	}
 
 	private void resign() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Resign");
+		builder.setMessage("Are you sure?");
 
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				
+				final String winner = game.getCurrentPlayer().getColor() == PlayerColor.WHITE ? "Black" : "White";
+				
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which){
+						case DialogInterface.BUTTON_POSITIVE:
+							Intent intent = getIntent();
+							finish();
+							RUN_ONCE = false;
+							startActivity(intent);
+							break;
+
+						case DialogInterface.BUTTON_NEGATIVE:
+							startActivity(new Intent(ChessActivity.this, HomeActivity.class));
+							RUN_ONCE = false;
+							finish();
+							break;
+						}
+					}
+				};
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(ChessActivity.this);
+				builder.setMessage(winner + " wins! Want to play again?").setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();
+			}
+		});
+
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	private void undo() {

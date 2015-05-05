@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.CS213.androidchess101.R;
 import com.CS213.model.ChessPiece;
 import com.CS213.model.Square;
 

@@ -1,10 +1,6 @@
 package com.CS213.model;
 
-import java.io.Serializable;
-
-public class Move implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+public class Move {
 
 	public static enum MoveType {
 		NORMAL, CASTLE, ENPASSANT
@@ -23,14 +19,7 @@ public class Move implements Serializable{
 		this.destination = destination;
 	}
 
-	public Move(ChessPiece chessPiece, ChessPiece capture, Square source, Square destination, MoveType type) {
-		this.chessPiece = chessPiece;
-		this.capture = capture;
-		this.source = source;
-		this.destination = destination;
-		this.type = type;
-	}
-
-
+	public void setType(MoveType type) { this.type = type; }
+	
 }
 
