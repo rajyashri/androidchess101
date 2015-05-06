@@ -22,9 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.CS213.controller.Game;
+import com.CS213.model.Bishop;
 import com.CS213.model.ChessPiece;
-import com.CS213.model.Move;
+import com.CS213.model.King;
+import com.CS213.model.Knight;
+import com.CS213.model.Pawn;
 import com.CS213.model.PlayerColor;
+import com.CS213.model.Queen;
+import com.CS213.model.Rook;
 import com.CS213.model.Square;
 import com.CS213.view.SquareAdapter;
 
@@ -258,7 +263,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			undoPressed = false;
 
 		}
-		
+
 		checkDraw();
 
 	}
@@ -272,7 +277,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					
+
 					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -320,7 +325,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			turnView.setText(getResources().getString(R.string.white_turn));
 		}
-		
+
 		drawPressedThisTurn = false;
 	}
 
@@ -390,14 +395,14 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			@Override 
 			public void onClick(View argo) {
-				
+
 				if (!undoPressed) {
 					undoPressed = true;
 					if (game.undo()) changeTurnText();
 					adapter.notifyDataSetChanged();
 					chessboard.setAdapter(adapter);
 				}
-				
+
 			}
 		});
 	}
@@ -410,20 +415,63 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			ChessPiece piece = pieces.get(r.nextInt(pieces.size() - 1));
 
+			int sourcePos = chessboard.pointToPosition(piece.getLocation().getY(), piece.getLocation().getX());
+			
+			
+			if (piece instanceof King) {
+				
+				int n = sourcePos - 7;
+				int ne = sourcePos - 6;
+				int e = sourcePos + 1;
+				int se = sourcePos + 8;
+				int s = sourcePos + 7;
+				int sw = sourcePos + 6;
+				int w = sourcePos - 1;
+				int nw = sourcePos - 8;
+				int castleright = sourcePos + 2;
+				int castleleft = sourcePos + 2;
+				
+				if (game.move(sourcePos, n)) return;
+				if (game.move(sourcePos, ne)) return;
+				if (game.move(sourcePos, e)) return;
+				if (game.move(sourcePos, se)) return;
+				if (game.move(sourcePos, s)) return;
+				if (game.move(sourcePos, sw)) return;
+				if (game.move(sourcePos, w)) return;
+				if (game.move(sourcePos, nw)) return;
+				if (game.move(sourcePos, castleright)) return;
+				if (game.move(sourcePos, castleleft)) return;
+			}
+			else if (piece instanceof Queen) {
+				
+			}
+			else if (piece instanceof Knight) {
+				
+			}
+			else if (piece instanceof Bishop) {
+				
+			}
+			else if (piece instanceof Rook) {
+				
+			}
+			else if (piece instanceof Pawn) {
+				
+			}
+
 		}
 	}
 
 	private void resign() {
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Resign");
 		builder.setMessage("Are you sure?");
 
 		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				
+
 				final String winner = game.getCurrentPlayer().getColor() == PlayerColor.WHITE ? "Black" : "White";
-				
+
 				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {

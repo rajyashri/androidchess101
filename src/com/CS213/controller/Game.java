@@ -104,6 +104,8 @@ public class Game {
 
 		blackInCheck = false;
 		whiteInCheck = false;
+		
+		if (s > 63 || s < 0 || d > 63 || d < 0) return false;
 
 		//android position to (r,c) translation
 		int c = s%8;
@@ -116,7 +118,7 @@ public class Game {
 
 
 		Square dest = board[r][c];
-
+		
 		ChessPiece sourcePiece = source.getPiece();
 
 		ChessPiece destPiece = dest.getPiece();
