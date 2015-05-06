@@ -1,0 +1,8 @@
+syntax: glob
+
+*.class
+*.classpath
+*.project
+*.settings
+*.git
+.gitignore
