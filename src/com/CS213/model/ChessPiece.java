@@ -107,6 +107,8 @@ public abstract class ChessPiece {
 	public Square[][] getBoard() { return board; }
 
 	public void incrementMoves() { moves++; }
+	
+	public void decrementMoves() { moves--; }
 
 	public int numberOfMoves() { return moves; }
 	

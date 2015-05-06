@@ -6,11 +6,11 @@ public class Move {
 		NORMAL, CASTLE, ENPASSANT
 	}
 
-	public ChessPiece chessPiece;
-	public ChessPiece capture;
-	public Square source;
-	public Square destination;
-	public MoveType type;
+	private ChessPiece chessPiece;
+	private ChessPiece capture;
+	private Square source;
+	private Square destination;
+	private MoveType type;
 
 	public Move(ChessPiece chessPiece, ChessPiece capture, Square source, Square destination) {
 		this.chessPiece = chessPiece;
@@ -19,7 +19,19 @@ public class Move {
 		this.destination = destination;
 	}
 
+	public MoveType getType() { return type; }
+	
 	public void setType(MoveType type) { this.type = type; }
+	
+	public Square getDestination() { return destination; }
+	
+	public Square getSource() { return source;} 
+	
+	public void setCapture(ChessPiece piece) { this.capture = piece; }
+	
+	public ChessPiece getCapture() { return capture; }
+	
+	public ChessPiece getPiece() { return chessPiece; }
 	
 }
 

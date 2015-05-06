@@ -41,7 +41,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 	private SquareAdapter adapter;
 	private boolean drawPressed;
 	private boolean drawPressedThisTurn;
-	private Move lastMove;
+	private boolean undoPressed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -255,6 +255,7 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			squaresSelected[0].setBackgroundColor(updateColor(squarePositions[0]));
 			squaresSelected[0] = null;
 			squaresSelected[1] = null;
+			undoPressed = false;
 
 		}
 		
@@ -389,7 +390,14 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 			@Override 
 			public void onClick(View argo) {
-				undo();		
+				
+				if (!undoPressed) {
+					undoPressed = true;
+					if (game.undo()) changeTurnText();
+					adapter.notifyDataSetChanged();
+					chessboard.setAdapter(adapter);
+				}
+				
 			}
 		});
 	}
@@ -452,9 +460,6 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 		alert.show();
 	}
 
-	private void undo() {
-
-	}
 
 	private void draw() {
 

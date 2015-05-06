@@ -57,8 +57,6 @@ public class Game {
 
 		placePieces(black);
 		placePieces(white);
-
-
 	}
 
 	private void placePieces(Player player) {
@@ -92,7 +90,6 @@ public class Game {
 			player.addPiece(pawn);
 			player.addUncapturedPiece(pawn);
 		}
-
 	}
 
 	public Square[][] getBoard() { return board; }
@@ -107,9 +104,10 @@ public class Game {
 
 		blackInCheck = false;
 		whiteInCheck = false;
+
+		//android position to (r,c) translation
 		int c = s%8;
 		int r = s/8;
-
 
 		Square source = board[r][c];
 
@@ -135,7 +133,7 @@ public class Game {
 
 		if (!sourcePiece.canMoveTo(dest)) return false;
 
-		//capture
+		//normal capture
 		if (destPiece != null) {
 
 			destPiece.setLocation(null);
@@ -156,7 +154,20 @@ public class Game {
 		Move move = new Move(sourcePiece, capture, source, dest);
 
 		if (enPassant(sourcePiece, dest)) moveType = MoveType.ENPASSANT;
+		
+		//if enpassant, set capture to captured pawn -- at this point capture is still null
+		if (moveType == MoveType.ENPASSANT) {
+			
+			if (turn == black) {
+				
+				move.setCapture(capturedWhite[capturedWhiteCount - 1]);
+			} else {
+				
+				move.setCapture(capturedBlack[capturedBlackCount - 1]);
+			}
+		}
 
+		//if we are attempting to castle, then move king and rook appropriately
 		if (castle(sourcePiece, dest)) {
 
 			moveType = MoveType.CASTLE;
@@ -202,14 +213,14 @@ public class Game {
 				}
 			}
 		}
-		
+
 		source.setPiece(null);
 		sourcePiece.setLocation(dest);
 		dest.setPiece(sourcePiece);
 		sourcePiece.incrementMoves();
 
 
-		//promotion
+		//if a promotion is in order...
 		if (((turn == white && dest.getY() == 0) || (turn == black && dest.getY() == 7)) && sourcePiece instanceof Pawn) {
 
 			ChessPiece promotedPiece = promotion("Q");
@@ -220,9 +231,11 @@ public class Game {
 			sourcePiece = promotedPiece;
 			dest.setPiece(sourcePiece);
 		}
-
+		
+		
+		//check if we put the other player in check and set some flags, or announce game result if checkmate
 		Square oppKing = turn.getOpponent().getKing().getLocation();
-
+		
 		if (turn.getOpponent().getKing().inCheck(oppKing)) {
 
 			if (turn.getColor() == PlayerColor.WHITE) {
@@ -243,6 +256,111 @@ public class Game {
 		turn = (turn == white) ? black : white;
 
 		return true;
+	}
+
+	public boolean undo() {
+
+		if (moves.size() == 0) return false;
+
+		Move lastMove = moves.removeLast();
+		
+		Square source = lastMove.getSource();
+
+		Square dest = lastMove.getDestination();
+
+		ChessPiece piece = lastMove.getPiece();
+
+		ChessPiece capture = lastMove.getCapture();
+
+		MoveType type = lastMove.getType();
+
+		if (type == MoveType.NORMAL) {
+			
+			piece.setLocation(source);
+
+			if (capture != null)  {
+
+				if (capture.getPlayer().getColor() == PlayerColor.WHITE) {
+
+					capturedWhite[--capturedWhiteCount] = null;
+				} else {
+
+					capturedBlack[--capturedBlackCount] = null;
+				}
+				capture.getPlayer().addUncapturedPiece(capture);
+				capture.setLocation(dest);
+			}
+			piece.decrementMoves();
+			
+			board[source.getY()][source.getX()].setPiece(piece);
+			board[dest.getY()][dest.getX()].setPiece(capture);;
+
+		} else if (type == MoveType.ENPASSANT) {
+
+			piece.setLocation(source);
+
+			Square capLoc = capture.getLocation();
+			
+			board[capLoc.getY()][capLoc.getX()].setPiece(capture);
+			board[source.getY()][source.getX()].setPiece(piece);;
+			board[dest.getY()][dest.getX()].setPiece(null);
+			
+			if (capture.getPlayer().getColor() == PlayerColor.WHITE) {
+
+				capturedWhite[--capturedWhiteCount] = null;
+			} else {
+
+				capturedBlack[--capturedBlackCount] = null;
+			}
+			capture.getPlayer().addUncapturedPiece(capture);
+			piece.decrementMoves();
+			
+
+		} else if (type == MoveType.CASTLE) {
+			
+			piece.setLocation(source);
+			
+			if (piece.getPlayer().getColor() == PlayerColor.WHITE) {
+				
+				if (dest.getX() == 6) {
+					
+					board[source.getY()][source.getX()].setPiece(piece);
+					board[dest.getY()][dest.getX()].setPiece(null);
+					board[7][7].setPiece(board[7][5].getPiece());
+					board[7][5].getPiece().decrementMoves();
+					board[7][5].setPiece(null);
+				} else {
+					
+					board[source.getY()][source.getX()].setPiece(piece);
+					board[dest.getY()][dest.getX()].setPiece(null);
+					board[7][0].setPiece(board[7][3].getPiece());
+					board[7][3].getPiece().decrementMoves();
+					board[7][3].setPiece(null);
+				}
+			}
+			else {
+				
+				if (dest.getX() == 6) {
+					board[source.getY()][source.getX()].setPiece(piece);
+					board[dest.getY()][dest.getX()].setPiece(null);
+					board[0][7].setPiece(board[0][5].getPiece());
+					board[0][5].getPiece().decrementMoves();
+					board[0][5].setPiece(null);
+				} else {
+					board[source.getY()][source.getX()].setPiece(piece);
+					board[dest.getY()][dest.getX()].setPiece(null);
+					board[0][0].setPiece(board[0][3].getPiece());
+					board[0][3].getPiece().decrementMoves();
+					board[0][3].setPiece(null);
+				}
+			}
+			piece.decrementMoves();
+
+		}
+		
+		turn = (turn == white) ? black : white;
+		return true;
+
 	}
 
 	private boolean enPassant(ChessPiece sourcePiece, Square dest) {
@@ -279,7 +397,7 @@ public class Game {
 
 		int xPos = Math.abs( dest.getX() - sourcePiece.getLocation().getX());
 
-		if (sourcePiece instanceof King && xPos != -9) return true;
+		if (sourcePiece instanceof King && xPos == 2) return true;
 
 		return false;
 	}
