@@ -27,6 +27,7 @@ import com.CS213.model.ChessPiece;
 import com.CS213.model.King;
 import com.CS213.model.Knight;
 import com.CS213.model.Pawn;
+import com.CS213.model.PlayedGames;
 import com.CS213.model.PlayerColor;
 import com.CS213.model.Queen;
 import com.CS213.model.Rook;
@@ -211,6 +212,11 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 				Toast toast = null;
 				if (game.whiteWin() || game.blackWin()) {
 
+					if (record) {
+						PlayedGames.playedGames.add(game.getMoves());
+						PlayedGames.gameNames.add(gameName);
+					}
+
 					final String winner = game.whiteWin() == true ? "White" : "Black";
 
 					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -358,15 +364,17 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			@Override 
 			public void onClick(View argo) {
 
-				//AI();
+				AI();
+				adapter.notifyDataSetChanged();
+				chessboard.setAdapter(adapter);
 			}
 		});
 	}
 
 	private void initDrawButton() {
 
-		Button AIButton = (Button) findViewById(R.id.drawButton);
-		AIButton.setOnClickListener(new OnClickListener() {
+		Button drawButton = (Button) findViewById(R.id.drawButton);
+		drawButton.setOnClickListener(new OnClickListener() {
 
 			@Override 
 			public void onClick(View argo) {
@@ -409,56 +417,6 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 	private void AI() {
 
-		ArrayList<ChessPiece> pieces = game.getCurrentPlayer().getUncapturedPieces();
-		Random r = new Random();
-		for (int i = 0; i < pieces.size(); i++) {
-
-			ChessPiece piece = pieces.get(r.nextInt(pieces.size() - 1));
-
-			int sourcePos = chessboard.pointToPosition(piece.getLocation().getY(), piece.getLocation().getX());
-			
-			
-			if (piece instanceof King) {
-				
-				int n = sourcePos - 7;
-				int ne = sourcePos - 6;
-				int e = sourcePos + 1;
-				int se = sourcePos + 8;
-				int s = sourcePos + 7;
-				int sw = sourcePos + 6;
-				int w = sourcePos - 1;
-				int nw = sourcePos - 8;
-				int castleright = sourcePos + 2;
-				int castleleft = sourcePos + 2;
-				
-				if (game.move(sourcePos, n)) return;
-				if (game.move(sourcePos, ne)) return;
-				if (game.move(sourcePos, e)) return;
-				if (game.move(sourcePos, se)) return;
-				if (game.move(sourcePos, s)) return;
-				if (game.move(sourcePos, sw)) return;
-				if (game.move(sourcePos, w)) return;
-				if (game.move(sourcePos, nw)) return;
-				if (game.move(sourcePos, castleright)) return;
-				if (game.move(sourcePos, castleleft)) return;
-			}
-			else if (piece instanceof Queen) {
-				
-			}
-			else if (piece instanceof Knight) {
-				
-			}
-			else if (piece instanceof Bishop) {
-				
-			}
-			else if (piece instanceof Rook) {
-				
-			}
-			else if (piece instanceof Pawn) {
-				
-			}
-
-		}
 	}
 
 	private void resign() {

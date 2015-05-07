@@ -464,6 +464,8 @@ public class Game {
 	public boolean whiteWin() { return whiteWins; }
 
 	public boolean blackWin() { return blackWins; }
+	
+	public LinkedList<Move> getMoves() { return moves; }
 
 
 }
