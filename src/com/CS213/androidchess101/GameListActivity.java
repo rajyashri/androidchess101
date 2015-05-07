@@ -1,16 +1,31 @@
 package com.CS213.androidchess101;
 
-import android.support.v7.app.ActionBarActivity;
+import com.CS213.model.PlayedGames;
+
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class GameListActivity extends ActionBarActivity {
 
+	private ListView listView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_list_activity);
+		
+		final ListView v = (ListView)findViewById(R.id.listView);
+		
+		 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                 android.R.layout.simple_list_item_1, android.R.id.text1,
+                 PlayedGames.gameNames.toArray(new String[PlayedGames.gameNames.size()]));
+		 
+		 v.setAdapter(adapter);
+		 listView = v;
 	}
 
 	@Override
