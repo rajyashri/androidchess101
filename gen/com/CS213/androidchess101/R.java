@@ -1720,12 +1720,12 @@ containing a value of this type.
         public static final int list_item=0x7f090025;
         public static final int middle=0x7f09001d;
         public static final int never=0x7f090017;
-        public static final int nextButton=0x7f09004b;
+        public static final int nextButton=0x7f09004c;
         public static final int none=0x7f09000f;
         public static final int normal=0x7f09000b;
         public static final int piece=0x7f09004f;
         public static final int playButton=0x7f090049;
-        public static final int previousButton=0x7f09004c;
+        public static final int previousButton=0x7f09004b;
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
