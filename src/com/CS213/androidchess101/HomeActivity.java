@@ -1,5 +1,8 @@
 package com.CS213.androidchess101;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,8 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.CS213.model.Move;
+import com.CS213.model.PlayedGames;
+	
 
 public class HomeActivity extends ActionBarActivity {
+	
+	public static boolean RUN_ONCE = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,11 @@ public class HomeActivity extends ActionBarActivity {
 		setContentView(R.layout.home_activity);
 		initPlayButton();
 		initReplayButton();
+		if (!RUN_ONCE) {
+			RUN_ONCE = true;
+			PlayedGames.playedGames = new ArrayList<LinkedList<Move>>();
+			PlayedGames.gameNames = new ArrayList<String>();
+		}
 	}
 
 
