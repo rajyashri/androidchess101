@@ -11,6 +11,7 @@ public class Move {
 	private Square source;
 	private Square destination;
 	private MoveType type;
+	private int s, d;
 
 	public Move(ChessPiece chessPiece, ChessPiece capture, Square source, Square destination) {
 		this.chessPiece = chessPiece;
@@ -33,5 +34,13 @@ public class Move {
 	
 	public ChessPiece getPiece() { return chessPiece; }
 	
+	public void setSourcePosition(int s) { this.s = s;}
+	
+	public int getSourcePosition() { return s; }
+	
+	public void setDestPosition(int d) { this.d = d; }
+	
+	public int getDestPosition() { return d; }
+
 }
 

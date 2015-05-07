@@ -1,15 +1,19 @@
 package com.CS213.androidchess101;
 
-import com.CS213.model.PlayedGames;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class GameListActivity extends ActionBarActivity {
+import com.CS213.model.PlayedGames;
+
+public class GameListActivity extends ActionBarActivity implements OnItemClickListener {
 
 	private ListView listView;
 	
@@ -25,6 +29,7 @@ public class GameListActivity extends ActionBarActivity {
                  PlayedGames.gameNames.toArray(new String[PlayedGames.gameNames.size()]));
 		 
 		 v.setAdapter(adapter);
+		 v.setOnItemClickListener(this);
 		 listView = v;
 	}
 
@@ -46,14 +51,14 @@ public class GameListActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	/*private static void initDisplayButton() {
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
 		
-		public display() {
-			
-			//Here's all I need to do. Get focused for like 2 hours andfigure how to display my board. Then i'll e like seen you before
-			
-		}
-	}*/
+		PlayedGames.activeIndex = position;
+		startActivity(new Intent(GameListActivity.this, ReplayActivity.class));
+		
+	}
 	
 }
