@@ -254,6 +254,8 @@ public class Game {
 		}
 
 		move.setType(moveType);
+		move.setSourcePosition(s);
+		move.setDestPosition(d);
 		moves.add(move);
 		turn = (turn == white) ? black : white;
 

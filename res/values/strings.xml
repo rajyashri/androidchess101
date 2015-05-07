@@ -18,5 +18,7 @@
     <string name="black_turn">Black\'s Turn</string>
     <string name="welcome_text">ANDROID CHESS</string>
     <string name="title_activity_replay">ReplayActivity</string>
+    <string name="next_btn">Next</string>
+    <string name="prev_btn">Previous</string>
 
 </resources>

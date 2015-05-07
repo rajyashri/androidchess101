@@ -430,6 +430,11 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 
 				final String winner = game.getCurrentPlayer().getColor() == PlayerColor.WHITE ? "Black" : "White";
 
+				if (record) {
+					PlayedGames.playedGames.add(game.getMoves());
+					PlayedGames.gameNames.add(gameName);
+				}
+				
 				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
