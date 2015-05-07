@@ -415,12 +415,12 @@ int id listView 0x7f090046
 int id list_item 0x7f090025
 int id middle 0x7f09001d
 int id never 0x7f090017
-int id nextButton 0x7f09004b
+int id nextButton 0x7f09004c
 int id none 0x7f09000f
 int id normal 0x7f09000b
 int id piece 0x7f09004f
 int id playButton 0x7f090049
-int id previousButton 0x7f09004c
+int id previousButton 0x7f09004b
 int id progress_circular 0x7f090007
 int id progress_horizontal 0x7f090008
 int id radio 0x7f09002b

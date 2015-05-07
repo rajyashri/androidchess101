@@ -364,9 +364,8 @@ public class ChessActivity extends ActionBarActivity implements OnItemClickListe
 			@Override 
 			public void onClick(View argo) {
 
-				AI();
-				adapter.notifyDataSetChanged();
-				chessboard.setAdapter(adapter);
+				Toast toast = Toast.makeText(ChessActivity.this, "Available in Premium Version Only", Toast.LENGTH_LONG);
+				toast.show();
 			}
 		});
 	}
